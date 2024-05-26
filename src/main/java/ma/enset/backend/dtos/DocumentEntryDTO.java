@@ -8,6 +8,7 @@ import java.util.List;
 
 @Data
 public class DocumentEntryDTO {
+    private Long id;
     private String name;
     private LocalDateTime timestamp;
     private byte[] file;

@@ -69,6 +69,8 @@ public class BankMapper {
         DocumentEntryDTO documentEntryDTO = new DocumentEntryDTO();
         documentEntryDTO.setName(documentEntry.getName());
         documentEntryDTO.setTimestamp(documentEntry.getTimestamp());
+        // set the id
+        documentEntryDTO.setId(documentEntry.getId());
         // As we are not transferring file in DTO, we don't set file here
         return documentEntryDTO;
     }
@@ -85,6 +87,7 @@ public class BankMapper {
         DocumentEntry documentEntry = new DocumentEntry();
         documentEntry.setName(documentEntryDTO.getName());
         documentEntry.setTimestamp(documentEntryDTO.getTimestamp());
+        documentEntryDTO.setId(documentEntry.getId());
         return documentEntry;
     }
 
