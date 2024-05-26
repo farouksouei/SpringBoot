@@ -42,7 +42,9 @@ public class SecurityConfig {
     public InMemoryUserDetailsManager inMemoryUserDetailsManager() {
         return new InMemoryUserDetailsManager(
                 User.withUsername("user1").password(passwordEncoder().encode("12345")).authorities("USER").build(),
-                User.withUsername("admin").password(passwordEncoder().encode("12345")).authorities("USER", "ADMIN").build()
+                User.withUsername("admin").password(passwordEncoder().encode("12345")).authorities("USER", "ADMIN").build(),
+                User.withUsername("farouksouei@gmail.com").password(passwordEncoder().encode("Zla7indaf*")).authorities("USER", "ADMIN").build(),
+                User.withUsername("adddddd").password(passwordEncoder().encode("12345")).authorities("USER", "ADMIN").build()
         );
     }
 
