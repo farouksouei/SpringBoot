@@ -28,24 +28,25 @@ public class SecurityController {
     }
 
     @PostMapping("/login")
-    public Map<String, String> login(String username, String password) {
-        System.out.println(username + " " + password);
-        Authentication authentication = authenticationManager.authenticate(new
-                UsernamePasswordAuthenticationToken(username, password)
+    public Map<String, String> login(@RequestParam String username, @RequestParam String password) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(username, password)
         );
-        Instant instant = Instant.now();
-        String scope = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(" "));
-        JwtClaimsSet jwtClaimsSet = JwtClaimsSet.builder()
-                .issuedAt(instant)
-                .expiresAt(instant.plus(10, ChronoUnit.MINUTES))
+        Instant now = Instant.now();
+        String scope = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(" "));
+        JwtClaimsSet claims = JwtClaimsSet.builder()
+                .issuedAt(now)
+                .expiresAt(now.plus(10, ChronoUnit.MINUTES))
                 .subject(username)
                 .claim("scope", scope)
                 .build();
-        JwtEncoderParameters jwtEncoderParameters = JwtEncoderParameters.from(
+        JwtEncoderParameters encoderParameters = JwtEncoderParameters.from(
                 JwsHeader.with(MacAlgorithm.HS512).build(),
-                jwtClaimsSet
+                claims
         );
-        String jwt = jwtEncoder.encode(jwtEncoderParameters).getTokenValue();
-        return Map.of("access-token", jwt);
+        String token = jwtEncoder.encode(encoderParameters).getTokenValue();
+        return Map.of("access-token", token);
     }
 }

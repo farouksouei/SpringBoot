@@ -1,15 +1,13 @@
 package ma.enset.backend;
 
-import ma.enset.backend.services.BankService;
+import ma.enset.backend.entities.Role;
+import ma.enset.backend.entities.User;
+import ma.enset.backend.services.UserService;
+import ma.enset.backend.services.RoleService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Stream;
 
 @SpringBootApplication
 public class BackEndApplication {
@@ -19,55 +17,49 @@ public class BackEndApplication {
     }
 
     @Bean
-    CommandLineRunner commandLineRunner(BankService bankAccountService) {
+    CommandLineRunner commandLineRunner(UserService userService, RoleService roleService) {
         return args -> {
-            bankAccountService.deleteAccount("0787e914-d38e-443a-8197-5d9918a4223c");
+
+
+            /*
+            // Create roles
+            Role userRole = new Role();
+            userRole.setName("USER");
+            roleService.saveRole(userRole);
+
+                        Role userRole = new Role();
+            userRole.setName("RSSI");
+            roleService.saveRole(userRole);
+
+            Role adminRole = new Role();
+            adminRole.setName("ADMIN");
+            roleService.saveRole(adminRole);
+
+            // Create users
+            User user1 = new User();
+            user1.setUsername("user1");
+            user1.setPassword("12345");
+            user1.setEnabled(true);
+            userService.saveUser(user1);
+            userService.addRoleToUser(user1.getUsername(), "USER");
+
+            User admin = new User();
+            admin.setUsername("admin");
+            admin.setPassword("12345");
+            admin.setEnabled(true);
+            userService.saveUser(admin);
+            userService.addRoleToUser(admin.getUsername(), "ADMIN");
+            userService.addRoleToUser(admin.getUsername(), "USER");
+
+            User farouk = new User();
+            farouk.setUsername("farouksouei@gmail.com");
+            farouk.setPassword("Zla7indaf*");
+            farouk.setEnabled(true);
+            userService.saveUser(farouk);
+            userService.addRoleToUser(farouk.getUsername(), "ADMIN");
+            userService.addRoleToUser(farouk.getUsername(), "USER");
+
+             */
         };
     }
-
-	/*@Bean
-	CommandLineRunner start(CustomerRepository customerRepository,
-							BankAccountRepository bankAccountRepository,
-							AccountOperationRepository accountOperationRepository){
-		return args -> {
-			Stream.of("Hassan","Yassine","Aicha").forEach(name->{
-				Customer customer=new Customer();
-				customer.setName(name);
-				customer.setEmail(name+"@gmail.com");
-				customerRepository.save(customer);
-			});
-			customerRepository.findAll().forEach(cust->{
-				CurrentAccount currentAccount=new CurrentAccount();
-				currentAccount.setId(UUID.randomUUID().toString());
-				currentAccount.setBalance(Math.random()*90000);
-				currentAccount.setCreatedAt(new Date());
-				currentAccount.setAccountStatus(AccountStatus.CREATED);
-				currentAccount.setCustomer(cust);
-				currentAccount.setOverDraft(9000);
-				bankAccountRepository.save(currentAccount);
-
-				SavingAccount savingAccount=new SavingAccount();
-				savingAccount.setId(UUID.randomUUID().toString());
-				savingAccount.setBalance(Math.random()*90000);
-				savingAccount.setCreatedAt(new Date());
-				savingAccount.setAccountStatus(AccountStatus.CREATED);
-				savingAccount.setCustomer(cust);
-				savingAccount.setInterestRate(5.5);
-				bankAccountRepository.save(savingAccount);
-
-			});
-			bankAccountRepository.findAll().forEach(acc->{
-				for (int i = 0; i <10 ; i++) {
-					AccountOperation accountOperation=new AccountOperation();
-					accountOperation.setDateOperation(new Date());
-					accountOperation.setAmount(Math.random()*12000);
-					accountOperation.setOperationType(Math.random()>0.5? OperationType.DEBIT: OperationType.CREDIT);
-					accountOperation.setBankAccount(acc);
-					accountOperationRepository.save(accountOperation);
-				}
-
-			});
-		};
-
-	}*/
 }
