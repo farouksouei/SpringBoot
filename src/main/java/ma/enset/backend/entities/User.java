@@ -1,5 +1,6 @@
 package ma.enset.backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.Set;
@@ -20,6 +21,8 @@ public class User {
     @Column(nullable = false)
     private boolean enabled;
 
+
+    @JsonManagedReference
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",

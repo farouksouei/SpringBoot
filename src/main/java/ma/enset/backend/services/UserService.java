@@ -5,6 +5,7 @@ import ma.enset.backend.entities.User;
 import ma.enset.backend.repositories.RoleRepository;
 import ma.enset.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,9 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private NamedParameterJdbcTemplate jdbcTemplate;
 
     public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
@@ -44,7 +48,9 @@ public class UserService {
     }
 
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        List<User> users = userRepository.findAll();
+        users.forEach(user -> user.getRoles().size()); // This line is to fetch roles
+        return users;
     }
 
     public User getUserById(Long id) {

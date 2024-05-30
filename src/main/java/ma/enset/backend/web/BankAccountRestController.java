@@ -2,9 +2,14 @@ package ma.enset.backend.web;
 
 import lombok.AllArgsConstructor;
 import ma.enset.backend.dtos.*;
+import ma.enset.backend.entities.User;
 import ma.enset.backend.exceptions.BalanceNotSufficientException;
 import ma.enset.backend.exceptions.BankAccountNotFoundException;
 import ma.enset.backend.services.BankService;
+import ma.enset.backend.services.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,8 +17,12 @@ import java.util.List;
 
 @RestController
 @CrossOrigin("*")
+
 @AllArgsConstructor
 public class BankAccountRestController {
+    private static final Logger log = LoggerFactory.getLogger(BankAccountRestController.class);
+    private UserService userService;
+
     private BankService bankService;
 
     @GetMapping("/bank-accounts")
@@ -92,4 +101,8 @@ public class BankAccountRestController {
     public void deleteAccount(@PathVariable String id){
        bankService.deleteAccount(id);
     }
+
+
+
+
 }

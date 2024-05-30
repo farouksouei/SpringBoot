@@ -4,10 +4,10 @@ import lombok.AllArgsConstructor;
 import ma.enset.backend.dtos.CustomerDTO;
 import ma.enset.backend.dtos.DocumentEntryDTO;
 import ma.enset.backend.entities.DocumentEntry;
+import ma.enset.backend.entities.User;
 import ma.enset.backend.exceptions.CustomerNotFoundException;
 import ma.enset.backend.mappers.BankMapper;
-import ma.enset.backend.services.BankService;
-import ma.enset.backend.services.DocumentEntryService;
+import ma.enset.backend.services.*;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -20,7 +20,16 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
-
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+import ma.enset.backend.entities.User;
+import ma.enset.backend.entities.Role;
+import ma.enset.backend.services.UserService;
+import java.util.Map;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -40,6 +49,13 @@ public class CustomerRestController {
 
     @Autowired
     private BankMapper bankMapper;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private RoleService roleService;
+
 
 
 
@@ -111,7 +127,7 @@ public class CustomerRestController {
         return documentEntryDTO;
     }
 
-    @GetMapping("/documents")
+    @GetMapping(path = "/documents")
     @PreAuthorize("isAuthenticated()")
     public List<DocumentEntryDTO> getDocuments() {
         return documentEntryService.viewDocumentEntries();
@@ -137,4 +153,71 @@ public class CustomerRestController {
         return data;
     }
 
+
+    @GetMapping(path ="/api/users")
+    public List<User> getAllUsers() {
+        return userService.getAllUsers();
+    }
+
+    @GetMapping(path ="/api/users/{id}")
+    public User getUserById(@PathVariable Long id) {
+        return userService.getUserById(id);
+    }
+
+    @PostMapping(path ="/api/users")
+    public User createUser(@RequestBody Map<String, Object> payload) {
+        User user = new User();
+        user.setUsername((String) payload.get("username"));
+        user.setPassword((String) payload.get("password"));
+        user.setEnabled((Boolean) payload.get("enabled"));
+
+        List<Map<String, String>> rolesPayload = (List<Map<String, String>>) payload.get("roles");
+        Set<Role> roles = rolesPayload.stream()
+                .map(rolePayload -> {
+                    String roleName = rolePayload.get("name");
+                    Role role = roleService.findByName(roleName);
+                    if (role == null) {
+                        throw new RuntimeException("Role not found: " + roleName);
+                    }
+                    return role;
+                })
+                .collect(Collectors.toSet());
+
+        user.setRoles(roles);
+
+        return userService.saveUser(user);
+    }
+
+    @PutMapping(path ="/api/users/{id}")
+    public User updateUser(@PathVariable Long id, @RequestBody Map<String, Object> payload) {
+        User user = userService.getUserById(id);
+        if (user == null) {
+            throw new RuntimeException("User not found: " + id);
+        }
+
+        user.setUsername((String) payload.get("username"));
+        user.setPassword((String) payload.get("password"));
+        user.setEnabled((Boolean) payload.get("enabled"));
+
+        List<Map<String, String>> rolesPayload = (List<Map<String, String>>) payload.get("roles");
+        Set<Role> roles = rolesPayload.stream()
+                .map(rolePayload -> {
+                    String roleName = rolePayload.get("name");
+                    Role role = roleService.findByName(roleName);
+                    if (role == null) {
+                        throw new RuntimeException("Role not found: " + roleName);
+                    }
+                    return role;
+                })
+                .collect(Collectors.toSet());
+
+        user.setRoles(roles);
+
+        return userService.saveUser(user);
+    }
+
+    @DeleteMapping("/api/users/{id}")
+    public void deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
+    }
 }

@@ -1,5 +1,7 @@
 package ma.enset.backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 
@@ -15,6 +17,8 @@ public class Role {
     @Column(nullable = false, unique = true)
     private String name;
 
+
+    @JsonBackReference
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;
 
