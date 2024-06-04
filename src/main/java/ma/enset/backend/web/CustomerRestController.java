@@ -165,8 +165,10 @@ public class CustomerRestController {
             throw new RuntimeException("User not found: " + id);
         }
 
+        System.out.println("payload: " + payload);
+
         user.setUsername((String) payload.get("username"));
-        user.setPassword((String) payload.get("password"));
+        //user.setPassword((String) payload.get("password"));
         user.setEnabled((Boolean) payload.get("enabled"));
 
         List<Map<String, String>> rolesPayload = (List<Map<String, String>>) payload.get("roles");

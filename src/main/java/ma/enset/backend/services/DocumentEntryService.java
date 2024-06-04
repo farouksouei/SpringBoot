@@ -83,6 +83,6 @@ public class DocumentEntryService {
                 .collect(Collectors.toList());
     }
 
-    // view a single document by id
+
 
 }
