@@ -2,7 +2,7 @@ package ma.enset.backend.services;
 
 import ma.enset.backend.dtos.DocumentEntryDTO;
 import ma.enset.backend.entities.DocumentEntry;
-import ma.enset.backend.mappers.BankMapper;
+import ma.enset.backend.mappers.MeoMapper;
 import ma.enset.backend.repositories.DocumentEntryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class DocumentEntryService {
     private DocumentEntryRepository documentEntryRepository;
 
     @Autowired
-    private BankMapper bankMapper;
+    private MeoMapper bankMapper;
 
     // Directory where files will be saved
     private static final String FILE_DIRECTORY = "C:/Users/farou/Downloads/";
@@ -47,14 +47,14 @@ public class DocumentEntryService {
         Files.write(Paths.get(filePath), documentEntryDTO.getFile());
 
         // Convert DTO to entity and set the file path
-        DocumentEntry documentEntry = BankMapper.toDocumentEntry(documentEntryDTO);
+        DocumentEntry documentEntry = MeoMapper.toDocumentEntry(documentEntryDTO);
         documentEntry.setFilePath(filePath); // Assuming the entity has a filePath field
 
         // Save the entity to the database
         DocumentEntry savedDocumentEntry = documentEntryRepository.save(documentEntry);
 
         // Convert the saved entity back to DTO
-        DocumentEntryDTO savedDocumentEntryDTO = BankMapper.toDocumentEntryDTO(savedDocumentEntry);
+        DocumentEntryDTO savedDocumentEntryDTO = MeoMapper.toDocumentEntryDTO(savedDocumentEntry);
 
         return savedDocumentEntryDTO;
     }

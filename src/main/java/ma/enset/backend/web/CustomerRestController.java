@@ -6,7 +6,7 @@ import ma.enset.backend.dtos.DocumentEntryDTO;
 import ma.enset.backend.entities.DocumentEntry;
 import ma.enset.backend.entities.User;
 import ma.enset.backend.exceptions.CustomerNotFoundException;
-import ma.enset.backend.mappers.BankMapper;
+import ma.enset.backend.mappers.MeoMapper;
 import ma.enset.backend.services.*;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -41,14 +41,13 @@ import ma.enset.backend.repositories.DocumentEntryRepository;
 @CrossOrigin("*")
 @AllArgsConstructor
 public class CustomerRestController {
-    private final BankService bankService;
     private final DocumentEntryService documentEntryService;
 
     @Autowired
     private DocumentEntryRepository documentEntryRepository;
 
     @Autowired
-    private BankMapper bankMapper;
+    private MeoMapper bankMapper;
 
     @Autowired
     private UserService userService;
@@ -59,35 +58,6 @@ public class CustomerRestController {
 
 
 
-    @GetMapping(path = "/customers")
-    @PreAuthorize("hasAuthority('SCOPE_USER')")
-    public List<CustomerDTO> getCustomersDTO() {
-        return bankService.getCustomersDTO();
-    }
-
-    @GetMapping(path = "/customers/{id}")
-    @PreAuthorize("hasAuthority('SCOPE_USER')")
-    public CustomerDTO getCustomersDTO(@PathVariable Long id) throws CustomerNotFoundException {
-        return bankService.getCustomerDTO(id);
-    }
-
-    @PostMapping(path = "/add-customer")
-    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-    public CustomerDTO saveCustomerDTO(@RequestBody CustomerDTO customerDTO) {
-        return bankService.saveCustomerDTO(customerDTO);
-    }
-
-    @PutMapping(path = "/update-customer/{id}")
-    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-    public CustomerDTO updateCustomer(@PathVariable Long id, @RequestBody CustomerDTO customerDTO) throws CustomerNotFoundException {
-        return bankService.updateCustomerDTO(id, customerDTO);
-    }
-
-    @DeleteMapping(path = "/delete-customer/{id}")
-    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-    public void deleteCustomer(@PathVariable Long id) {
-        bankService.deleteCustomer(id);
-    }
 
     @PostMapping(path = "/documents", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("isAuthenticated()")
