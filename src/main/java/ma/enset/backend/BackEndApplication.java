@@ -60,6 +60,13 @@ public class BackEndApplication {
             userService.addRoleToUser(farouk.getUsername(), "USER");
 
              */
+            User admin = new User();
+            admin.setUsername("admin");
+            admin.setPassword("12345");
+            admin.setEnabled(true);
+            userService.saveUser(admin);
+            userService.addRoleToUser(admin.getUsername(), "ADMIN");
+            userService.addRoleToUser(admin.getUsername(), "USER");
         };
     }
 }

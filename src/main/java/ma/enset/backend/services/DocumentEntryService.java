@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
@@ -26,7 +27,7 @@ public class DocumentEntryService {
     private MeoMapper bankMapper;
 
     // Directory where files will be saved
-    private static final String FILE_DIRECTORY = "C:/Users/farou/Downloads/";
+    private static final String FILE_DIRECTORY = System.getProperty("user.dir") + FileSystems.getDefault().getSeparator();
 
     public DocumentEntryDTO saveDocumentEntry(DocumentEntryDTO documentEntryDTO) throws IOException {
         // Validate the DTO fields
