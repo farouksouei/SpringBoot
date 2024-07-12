@@ -123,6 +123,13 @@ public class CustomerRestController {
         return data;
     }
 
+    // deleteDocumentEntry method
+    @DeleteMapping("/documents/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public void deleteDocument(@PathVariable Long id) {
+        documentEntryService.deleteDocumentEntry(id);
+    }
+
 
     @GetMapping(path ="/api/users")
     public List<User> getAllUsers() {
